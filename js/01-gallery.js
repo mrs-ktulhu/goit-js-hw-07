@@ -24,12 +24,21 @@ const onContainerClick = (e) => {
   e.preventDefault();
 
   if (e.target.classList.contains("gallery")) return;
-    const source = e.target.dataset.source;
+
+  const source = e.target.dataset.source;
     
   const instance = basicLightbox.create(`
-    <img src="${source}"width="800" height="600">`);
+    <img src="${source}"width="800" height="600">`, {
+      onClose: (instance) => {document.removeEventListener('keyup', closeDetailView)}
+  });
 
   instance.show();
+  function closeDetailView(event) {
+    if (event.key === 'Escape') {
+      instance.close()
+    }
+  }
+  document.addEventListener('keyup', closeDetailView)
 };
 
 galleryContainerEl.addEventListener("click", onContainerClick);
